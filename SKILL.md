@@ -78,8 +78,7 @@ After searching and pre-filling what you can, ask about the gaps:
 1. **Relationship closeness** — How close are you? (e.g., close friend, acquaintance, professional contact, mentor)
 2. **Open to introductions?** — Is this person open to being introduced to others? Any caveats?
 3. **How you met** — if not already provided
-4. **Last contact** — When did you last speak/meet?
-5. **Interests** — hobbies, sports, lifestyle? (helps match people for non-work reasons)
+4. **Interests** — hobbies, sports, lifestyle? (helps match people for non-work reasons)
 
 Ask these as a short grouped follow-up (not one by one). Skip any that were already answered in the original message.
 
