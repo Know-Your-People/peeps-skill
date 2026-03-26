@@ -1,6 +1,6 @@
 ---
 name: Know Your People
-description: Private people intelligence — track who you know, what they're good at, and who should meet who. Built for finding the right person at the right time. Use when adding contacts, logging interactions, searching your network by skill or interest, or drafting introductions.
+description: Private people intelligence — track who you know, what they're good at, and who should meet who. Built for finding the right person at the right time. Use when adding people contacts or searching your network by skill or interest, considering introductions.
 metadata: {"clawdbot":{"emoji":"👥","os":["linux","darwin","win32"]}}
 ---
 
@@ -23,9 +23,8 @@ To keep context lean as the file grows:
 The owner's own contact file (slug derived from `.peopleconfig.yml` `owner` field) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others. Read it using the `owner` slug from config. Keep it up to date.
 
 ## Data Location
-All contact files live in `~/people/` — **not** inside the workspace or skill folder.
-On first use, create it: `mkdir -p ~/people/`
-Keeping data outside the workspace ensures it persists across skill updates and reinstalls, and avoids mixing personal data with skill code.
+All contact files live in `~/.clawbot/workspace/people/` - inside the workspace.
+On first use, create it: `mkdir -p ~/.clawbot/workspace/people/`
 
 ## Dataset Config — `.peopleconfig.yml`
 `~/people/.peopleconfig.yml` is the dataset config file. Read it at the start of any session involving this skill.
@@ -39,36 +38,24 @@ endpoint: null
 ```
 
 - **`owner`** — identifies whose dataset this is. Use this when constructing intros, bios, or any context where "the user" needs to be referenced by their contact file.
-- **`enclaves`** — optional. Only relevant if the user has joined a Peeps Enclave at peepsapp.ai. If empty or absent, the skill works fully in local-only mode — no network, no sync, no cloud.
-- If the file doesn't exist, operate in local-only mode and offer to create it with just the `owner` field.
+- **`enclaves`** — optional. Only relevant if the user has joined a Peeps Enclave at peepsapp.ai for network requests federation.
+- If the file doesni't exist, operate in local-only mode and offer to create it with just the `owner` field.
 
 ### Enclave — Optional Network Feature
 The enclave is an opt-in feature. The skill works fully without it.
 
-If the user has joined a Peeps Enclave (peepsapp.ai), the enclave allows sharing contact profiles with a trusted circle and querying across the group. All of this is optional, consensual, and revocable.
-
-**What gets shared to the enclave:** Name, pronouns, location, Acumen, Interests, Bio, Intro willingness, Notes (freeform)
-**Always stays local:** Private Notes 🔒, Relationship/how you know them
-
-### Sync Behavior (enclave users only)
-- **First sync:** always show all profiles for user audit before uploading anything. Store `last_sync` timestamp in `.peopleconfig.yml` after confirmation.
-- **Ongoing:** weekly by default. Two modes set by user:
-  - `review` — surface changes for approval before each sync
-  - `auto` — sync without review
-- **Manual push:** available on demand (e.g. after adding many contacts during active onboarding)
-- Only run sync logic if `enclaves` list in config is non-empty and has a valid `api_key`.
+If the user has joined a Peeps Enclave (peepsapp.ai), the enclave allows federation of requests in a trusted circle and querying across the group. All of this is optional, consensual, and revocable.
 
 ## Core Behavior
-- User mentions a person → check if contact exists, offer to create/update
+- User mentions a person → check if people contact exists, offer to create/update
 - User asks "who do I know in [domain/skill/location]?" → search by acumen, interests, location
 - User asks about someone → surface their file with relevant context
 - User wants to make an intro → draft it using both contact files + owner profile
 
 ## When User Mentions Someone
-- "Had coffee with Maria" → log interaction, create contact if new
+- "Had coffee with Maria" → ask if any updates from her, update if anythign important
 - "John's daughter is Sofia" → add to personal details
 - "Sarah loves hiking" → add to interests/notes
-- "Meeting with Tom tomorrow" → check calendar, surface Tom's context
 
 ## Creating a New Contact — Search First, Then Ask
 Before asking follow-up questions, always search the web for the person (name + any context provided). Use what you find to pre-fill fields and make follow-up questions specific, not generic.

@@ -1,2 +1,11 @@
 .clawhub/
 _meta.json
+
+# Local data — never commit to skill repo
+# Data lives in ~/people/ (outside the skill folder)
+# and should never be mixed with skill code
+data/
+people/
+contacts/
+*.db
+*.sqlite
