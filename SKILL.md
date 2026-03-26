@@ -84,23 +84,27 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 
 ## Contact Structure
 
-- One Markdown file per person: `maria-garcia.md`
-- Sections: basics, relationship, personal details, notes or private notes (not both unless needed)
+- One Markdown file per person like: `maria-garcia.md`
+- Name first (nickname or any naming note in brackets)
+
+### Fields
+
+- **Pronounce:** a pronunce
+- **LinkedIn:** link to LinkedIn
+- **How we met:** one sentence   
+- **Acumen:** skills and expertise, what person known for
+- **Relationship:** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
+- **Intro willingness:** (Open / Closed / Unknown)
+- **Interests:** — hobbies, sports, lifestyle 
+- **Bio** — one concise narrative paragraph
+
+### Notes 
+- Each note starts with a date “1 Mar 2026: note details”
 - Use **Notes** for general context worth remembering
 - Use **Private Notes 🔒** for sensitive info (debts, conflicts, things not to share) — always separate
-- No interaction history section — it goes stale fast. Capture what matters as a note instead.
-- Keep it human-readable — this is about relationships, not data entry
-
-## Key Fields To Capture
-
-- Name, how you met, where they work/live
-- **Relationship** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
-- **Intro willingness** (Open / Closed / Unknown)
-- **Interests** — hobbies, sports, lifestyle (for non-work matching: running partners, travel buddies, etc.)
-- **Acumen** — skills and expertise (for work/project matching)
-- **Bio** — one concise narrative paragraph
 - Birthday, anniversary, important dates → Notes
 - Family members, kids, sensitive info → Private Notes 🔒
+- Keep it human-readable — this is about relationships, not data entry
 
 ## Logging Interactions
 
