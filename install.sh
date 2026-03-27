@@ -54,14 +54,7 @@ fi
 CONFIG_FILE="${PEOPLE_DIR}/.peopleconfig.yml"
 if [ ! -f "$CONFIG_FILE" ]; then
   cat > "$CONFIG_FILE" << 'EOF'
-# Know Your People — Dataset Config
-owner: null  # set to your contact file slug (e.g. jane-smith)
-
-enclaves: []  # populated when you join an enclave at peepsapp.ai
-
-endpoint: https://api.peepsapp.ai
-created: $(date -I)
-version: 1
+owner: <your-contact-file-slug> # set to your contact file slug (e.g. jane-smith)
 EOF
   echo -e "${GREEN}✓ Created ${CONFIG_FILE}${NC}"
 fi
