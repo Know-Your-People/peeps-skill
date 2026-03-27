@@ -89,18 +89,18 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 
 ### Fields
 
-- **Pronouns:** a pronouns
-- **LinkedIn:** link to LinkedIn
-- **Website:** personal or primary company website
-- **How I know them:** one sentence   
-- **Acumen:** skills and expertise, what person known for
+- **Pronouns:** guess, if unclear ask
+- **LinkedIn:** link to LinkedIn search for it
+- **Website:** personal or primary company website if you found any
+- **How I know them:** one sentence, ask about that   
+- **Acumen:** skills and expertise, what person known for, based on your search + any user input 
 - **Relationship:** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
-- **Intro willingness:** (Open / Closed / Unknown)
-- **Interests:** — hobbies, sports, lifestyle 
-- **Bio** — one concise narrative paragraph
+- **Intro willingness:** (Open / Closed / Cautious / Unknown)
+- **Interests:** — hobbies, sports, lifestyle, anything you found 
+- **Bio:** — one concise narrative paragraph based on your search and user input about them
 
 ### Notes 
-- Each note starts with a date “1 Mar 2026: note details”
+- Each note starts with current date “1 Mar 2026:”
 - Use **Notes** for general context worth remembering
 - Use **Private Notes 🔒** for sensitive info (debts, conflicts, things not to share) — always separate
 - Birthday, anniversary, important dates → Notes
@@ -123,6 +123,7 @@ Examples:
 - Enrich over time: add acumen, interests, intro willingness as you learn more
 - Periodically review sparse contacts and fill the gaps by asking questions
 - Capture details during conversations — don't wait for a "data entry session"
+- Ask about anyone mentioned in conversation and suggest to add them
 
 ## What To Surface Proactively
 
