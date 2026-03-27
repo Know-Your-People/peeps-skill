@@ -85,21 +85,33 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 ## Contact Structure
 
 - One Markdown file per person like: `maria-garcia.md`
-- Name first (nickname or any naming note in brackets)
 
 ### Fields
+
+```markdown
+# Full Name (nickname or any naming note in brackets)
 
 - **Pronouns:** guess, if unclear ask
 - **LinkedIn:** link to LinkedIn search for it
 - **Website:** personal or primary company website if you found any
-- **How I know them:** one sentence, ask about that   
-- **Acumen:** skills and expertise, what person known for, based on your search + any user input 
+- **How I know them:** one sentence, ask about that
+- **Acumen:** skills and expertise, what person known for, based on your search + any user input
 - **Relationship:** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
 - **Intro willingness:** (Open / Closed / Cautious / Unknown)
-- **Interests:** — hobbies, sports, lifestyle, anything you found 
+- **Interests:** — hobbies, sports, lifestyle, anything you found
 - **Bio:** — one concise narrative paragraph based on your search and user input about them
 
-### Notes 
+## Notes
+
+1 Mar 2026: note details
+
+## Private Notes
+
+1 Mar 2026: private note detials
+```
+
+## Notes
+
 - Each note starts with current date “1 Mar 2026:”
 - Use **Notes** for general context worth remembering
 - Use **Private Notes 🔒** for sensitive info (debts, conflicts, things not to share) — always separate
