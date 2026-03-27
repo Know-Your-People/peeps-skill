@@ -4,7 +4,7 @@ set -e
 SKILL_REPO="https://github.com/Know-Your-People/know-your-people-skill"
 SKILL_RAW="https://raw.githubusercontent.com/Know-Your-People/know-your-people-skill/main"
 SKILLS_DIR="${HOME}/.openclaw/workspace/skills/people"
-PEOPLE_DIR="${HOME}/people"
+PEOPLE_DIR="${HOME}/.openclaw/workspace/people"
 
 # Colors
 GREEN='\033[0;32m'
