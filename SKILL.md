@@ -17,7 +17,7 @@ The owner's own contact file (slug derived from `.peopleconfig.yml` `owner` fiel
 `~/.clawbot/workspace/people/actions.md` — the pending actions queue. Check this during morning briefings.
 
 - **Catch-ups:** people `owner` wants to reconnect with. Add when he says "we should catch up with David" or similar.
-- **Introductions:** intros to facilitate. Always include a pre-generated draft intro message (using ilya-belikin.md + both contact files for context). Format: `Person A → Person B — reason` followed by the intro text as a plain indented paragraph (no "Draft:" label, no quotes, no formatting).
+- **Introductions:** intros to facilitate. Always include a pre-generated draft intro message (using `owner` and both contact files for context). Format: `Person A → Person B — reason` followed by the intro text as a plain indented paragraph (no "Draft:" label, no quotes, no formatting).
 - Move completed items to `## Completed` with a date.
 - Keep it short — if it's not actionable, it shouldn't be here.
 
@@ -109,7 +109,7 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 
 ## Logging Interactions
 
-Don't create an interaction history. Instead, update the person's Notes with whatever is worth remembering long-term. If it's not worth keeping, don't write it down.
+Update the person's Notes with whatever is worth remembering long-term. If it's not worth keeping, don't write it down.
 
 Examples:
 
@@ -132,9 +132,9 @@ Examples:
 ## Details Worth Remembering
 
 - How you can help them / how they can help you
-- Kids/spouse names and ages
 - Recent life events: new job, moved, health issues
 - Preferences: vegetarian, doesn't drink, early riser
+- Kids/spouse names and ages
 - Sensitive topics to avoid
 
 ## What NOT To Suggest
