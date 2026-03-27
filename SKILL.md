@@ -89,7 +89,7 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 
 ### Fields
 
-- **Pronounce:** a pronunce
+- **Pronouns:** a pronouns
 - **LinkedIn:** link to LinkedIn
 - **Website:** personal or primary company website
 - **How I know them:** one sentence   
