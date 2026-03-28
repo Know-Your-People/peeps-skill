@@ -38,19 +38,19 @@ To keep context lean as the file grows:
 ```yaml
 owner: jane-smith # slug of the owner's contact file (without .md)
 
-# Enclave is optional — only needed if you join peepsapp.ai
+# Enclave is optional — only needed if you join dispatch.peepsapp.ai
 enclaves: []
 endpoint: null
 ```
 
 - **`owner`** — identifies whose dataset this is. Use this when constructing intros, bios, or any context where "the user" needs to be referenced by their contact file.
-- **`enclaves`** — optional. Only relevant if the user has joined a Peeps Enclave at peepsapp.ai for network requests federation.
+- **`enclaves`** — optional. Only relevant if the user has joined a Peeps Dispatch at dispatch.peepsapp.ai
 
-### Enclave — Optional Network Feature
+### Dispatch — Extent you reach
 
-The enclave is an opt-in feature. The skill works fully without it.
+The dispatch is an opt-in feature. The skill works fully without it.
 
-If the user has joined a Peeps Enclave (peepsapp.ai), the enclave allows federation of requests in a trusted circle and querying across the group. All of this is optional, consensual, and revocable.
+If the user has joined a Peeps Dispatch (dispatch.peepsapp.ai), the dispatch allows querying trussted friends AIs. All of this is optional, consensual, and revocable.
 
 ## Core Behavior
 
@@ -73,12 +73,13 @@ Example: "Found Peter — design strategist, ex-Steelcase Asia Pacific in HK, no
 
 ## Follow-Up Questions
 
-After searching and pre-filling what you can, ask about the gaps:
+After searching web and pre-filling what you can, ask about the gaps:
 
-1. **Relationship closeness** — How close are you? (e.g., close friend, acquaintance, professional contact, mentor)
-2. **Open to introductions?** — Is this person open to being introduced to others? Any caveats?
-3. **How you met** — if not already provided
-4. **Interests** — hobbies, sports, lifestyle? (helps match people for non-work reasons)
+1. **What they really good at?** - Acumen clarificaiton
+2. **Relationship closeness** — How close are you?
+3. **How open to intos?** — Is this person open to being introduced to others?
+4. **How you know them** — if not already provided
+5. **Interests** — hobbies, sports, lifestyle?
 
 Ask these as a short grouped follow-up (not one by one). Skip any that were already answered in the original message.
 
@@ -91,10 +92,10 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 ```markdown
 # Full Name (nickname or any naming note in brackets)
 
-- **Pronouns:** guess, if unclear ask
-- **LinkedIn:** link to LinkedIn search for it, start with https://
+- **Pronouns:** guess, if unclear - ask
+- **LinkedIn:** link to LinkedIn search web for it, start with https://
 - **Website:** personal or company website if you found any, star with https://
-- **How I know them:** one sentence, ask about that
+- **How I know them:** one sentence
 - **Acumen:** skills and expertise, what person known for, based on your search + any user input
 - **Relationship:** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
 - **Intro willingness:** (Open / Closed / Cautious / Unknown)
@@ -108,6 +109,13 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 ## Private Notes
 
 1 Mar 2026: private note detials
+
+## Contacts
+
+Mobile:
+Email:
+Instagram:
+etc.
 ```
 
 ## Notes
@@ -133,14 +141,21 @@ Examples:
 
 - Start by creating contacts as they come up naturally
 - Enrich over time: add acumen, interests, intro willingness as you learn more
-- Periodically review sparse contacts and fill the gaps by asking questions
 - Capture details during conversations — don't wait for a "data entry session"
 - Ask about anyone mentioned in conversation and suggest to add them
 
-## What To Surface Proactively
+## Heartbeat Check
+
+If it is not already there, ask you human if they want to add:
+
+On every heartbeat, check the oldest contact file in `peeps/`, check the web with their name and location and see if any updates about the person available. If anything significant add to the file.
+
+Surface proactivly in DM or appropriate channel:
 
 - "Alex mentioned job hunting last time" — relevant context resurfacing
 - "You haven't connected with Basel in a while" — if user wants relationship nudges
+
+If nothing intersting skip.
 
 ## Details Worth Remembering
 
@@ -184,6 +199,7 @@ grep -rl "Intro willingness.*Open" ~/.openclaw/workspace/peeps/
 ```
 
 **Keyword expansion examples — always broaden like this:**
+
 - "website" → `web\|design\|react\|webflow\|frontend\|ux\|figma`
 - "finance" → `finance\|fintech\|banking\|investment\|vc\|fund`
 - "startups" → `startup\|founder\|venture\|seed\|entrepreneur`
