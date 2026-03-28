@@ -213,85 +213,49 @@ When the user asks "who do I know in X", construct a multi-term grep from the do
 
 ## Appendix: Dispatch
 
-Dispatch is optional — Peeps works fully without it. **Enrollment / early access** matches the project README: **[peepsapp.ai](https://peepsapp.ai)** (Peeps Enclave). **API base:** `https://api.peepsapp.ai`. Prefer **`GET https://api.peepsapp.ai/openapi.json`** if field names drift.
+Dispatch is optional — Peeps works fully without it. **Enrollment / early access:** **[peepsapp.ai](https://peepsapp.ai)** (see project README). **API base:** `https://api.peepsapp.ai`.
 
-### Client policy
+### OpenAPI anchor (machine truth)
 
-**Pending row cap:** keep at most **3** open rows in **`dispatch-pending.md`** and at most **3** in **`dispatch-inbound.md`** — client-side only, not an API requirement. If at cap, defer new work until a row clears.
+**Request/response field names, path details, query parameters, status enums, SSE vs poll URLs, and HTTP error bodies** live in the spec — do not duplicate them here. Use:
 
-### Federation & answer presentation
+**`GET https://api.peepsapp.ai/openapi.json`** (or **`/openapi.json`** on the API host if that is how it is mounted — confirm in the repo README if needed).
 
-- **Stub rule (single rule for copy):** if **`answerSource === "stub"`** or **`stub === true`**, do **not** present the answer as live federated peer-network data — it is placeholder until real federation delivers matches.
-- **`federationLive`:** use only for **deployment / product messaging** (e.g. explain when federation is not fully live). Do not restate the stub rule; rely on **`answerSource` / `stub`** for how strongly to sell an answer.
+If you can fetch and parse OpenAPI, prefer it over this prose for anything that looks like a schema.
 
-### Outbound Dispatch
+**If OpenAPI is unreachable:** outbound = create a dispatch job per spec, persist whatever the create response needs to **poll until terminal** (e.g. poll URL id in `dispatch-pending.md`); inbound = **list pending jobs**, then **respond** or **decline** per spec — never invent JSON keys; common mistake is putting the user’s words in a field the spec does not define.
 
-**Prerequisites:** at least one **`enclaves`** value must match **`[0-9a-f]{64}`**; treat anything else as no key. In Dispatch **POST** bodies, **`ownerSlug`** must match **`owner`** in `peepsconfig.yml` (slug only, no `.md`).
+### Client policy (not in OpenAPI)
 
-**Create job (POST body — JSON keys must match API):**
+**Local first:** search `peeps/` (grep + reads) before any Dispatch call.
 
-- **`query`** (string) — the user’s question (never use a field named `question`).
-- **`keywords`** (string array, optional).
-- **`ownerSlug`** (string) — same as **`owner`** in config.
+**When to escalate outbound:** only if local search finds **no good match** or **only one** contact that fits **and** at least one valid enclave key exists (see **`enclaves`** above). Otherwise answer locally and, if appropriate, mention that the network can widen results after enrollment.
 
-Authenticate with **one** Bearer enclave key per request. **`webhookUrl`** is optional server-to-server; this skill’s file queues do not require webhooks.
+**Key choice:** use the **first** valid **`[0-9a-f]{64}`** key in `peepsconfig.yml` **`enclaves`** order per outbound job. One HTTP request uses one key; there is no merge-across-keys in one call unless a future policy says so.
 
-**Multi-key semantics:** one job uses one enclave key; the API does not merge keys in one call. This skill uses the **first** valid key in `enclaves` file order per outbound POST unless a future policy says otherwise.
+**Owner identity:** the slug in **`owner`** (no `.md`) must be sent in the outbound create body **exactly as the OpenAPI schema names and types it** — do not guess field names from this SKILL.
 
-**401 / errors:** structured codes include e.g. **`missing_authorization`**, **`invalid_authorization_scheme`** (not `Bearer` / malformed `Authorization`), **`invalid_api_key`**, **`invalid_api_key_format`**. On **`invalid_api_key`**, treat keys as stale — prompt re-copy from enrollment (**peepsapp.ai**). On **`invalid_api_key_format`**, fix `peepsconfig.yml`.
+**Pending row cap:** at most **3** open rows in **`dispatch-pending.md`** and at most **3** in **`dispatch-inbound.md`** — client policy only. If at cap, defer new work until a row clears.
 
-**When to call:** after local search (`peeps/`, grep + reads), if **no good match** or **only one** contact fits and a valid key exists → **POST** `https://api.peepsapp.ai` per OpenAPI with **`query`**, optional **`keywords`**, **`ownerSlug`**, Bearer auth. Response includes **`pollUrl`** and may include **`eventsUrl`**. Append jobs to **`dispatch-pending.md`** (ISO time, copy of **`query`**, store **`pollUrl`** for GET polling, optional **`eventsUrl`** for SSE, notes). Do not block the user’s turn — poll on **Heartbeat**.
+**Heartbeat cadence:** **no tight loops.** Do outbound poll / inbound fetch **once per heartbeat** (or SSE per spec if the runtime uses that instead of repeated GETs — details in OpenAPI). Do not spin between heartbeats.
 
-**Poll vs SSE:** default: each heartbeat, **GET** each stored **`pollUrl`** once. Alternatively, **SSE** on **`eventsUrl`** if the runtime supports it (same auth; README-style `data:` line). Heartbeat GET-only is always valid.
+### Federation & answer presentation (UX, not schema)
 
-**Outbound queue & poll**
+- **Stub rule:** if the completed job indicates **stub** / **`answerSource: "stub"`** (exact fields per OpenAPI), **do not** phrase the answer as a live federated peer-network match — it is placeholder until real federation applies.
+- **`federationLive`:** use only for **product / deployment messaging** (e.g. federation not fully live). Do not duplicate the stub rule; strength of claims comes from stub / **answerSource**, not from **`federationLive`** alone.
 
-1. Use the **first** valid enclave key per **Multi-key semantics**.
-2. Respect **Pending row cap** for `dispatch-pending.md`.
-3. **No tight loops** — only on each heartbeat, one **GET** per **`pollUrl`** (or SSE for that job), unless between-heartbeat retry after a confirmed failure path.
-4. **Remove a row only in a terminal state:** success → show result (apply **Stub rule**), then delete; terminal poll failure → tell the user once, then delete. Retry ambiguous/transient responses on the next heartbeat.
+### Outbound — operational ledger & queue
 
-### Inbound Dispatch (responder)
+**`dispatch-pending.md`:** append when you start an outbound job — **ISO time**, the user’s question (for your own log), and whatever identifiers / URLs the create response requires to **poll until done** (per OpenAPI). **Remove a row only on a terminal outcome:** success → show the user (apply **Stub rule**), then delete; hard failure → notify once, then delete; ambiguous → retry on the **next heartbeat**, not in a loop.
 
-You are the **trusted contact** for another user’s query. **Never** auto-send derived contact data; require explicit approval before **`respond`**.
+**Queue steps:** (1) first valid key; (2) respect **Pending row cap**; (3) one poll pass per heartbeat (or SSE if implemented per spec); (4) terminal removal only as above.
 
-**HTTP (replace host if self-hosted; `Bearer` = valid hex key):**
+### Inbound — consent & operational ledger
 
-| Action | Method | Path |
-|--------|--------|------|
-| List pending | `GET` | `https://api.peepsapp.ai/v1/dispatch/inbound/jobs?status=pending` |
-| Respond | `POST` | `https://api.peepsapp.ai/v1/dispatch/inbound/jobs/{jobId}/respond` — body `{"answer":"..."}` |
-| Decline | `POST` | `https://api.peepsapp.ai/v1/dispatch/inbound/jobs/{jobId}/decline` — optional body e.g. `{"reason":"..."}` |
-| Enqueue (upstream / tests) | `POST` | `https://api.peepsapp.ai/v1/dispatch/inbound/jobs` — e.g. `{"query":"…","requesterLabel":"…"}` |
+**Consent:** draft answers **only** from **`peeps/`** files. **Never** auto-send. Show the human the draft and ask **send or discard** before calling the API to submit.
 
-**Enqueue response:** `POST …/inbound/jobs` returns JSON shaped like `{ "job": { "id": "<uuid>", ... } }` — read **`job.id`** (not a bare top-level `id`) when wiring scripts or logs.
+**Discard:** call the spec’s **decline** operation (optional reason in body per OpenAPI), then remove the ledger row. **Do not** only delete locally — that leaves orphaned server-side jobs.
 
-**Quick curl (debug):** replace `KEY` / host as needed.
+**`dispatch-inbound.md`:** one block per job — **ISO time**, stable **job id** from the API, the asker’s question text, status (`pending_run` → `awaiting_send_confirm` → done), **draft answer**, and user decision.
 
-```bash
-curl -sS -X POST https://api.peepsapp.ai/v1/dispatch/inbound/jobs \
-  -H "Authorization: Bearer KEY" -H "Content-Type: application/json" \
-  -d '{"query":"Who do you know in fintech?","requesterLabel":"Alex"}'
-# Response includes job id at .job.id
-
-curl -sS "https://api.peepsapp.ai/v1/dispatch/inbound/jobs?status=pending" \
-  -H "Authorization: Bearer KEY"
-
-curl -sS -X POST "https://api.peepsapp.ai/v1/dispatch/inbound/jobs/JOB_UUID/respond" \
-  -H "Authorization: Bearer KEY" -H "Content-Type: application/json" \
-  -d '{"answer":"From my notes: …"}'
-
-curl -sS -X POST "https://api.peepsapp.ai/v1/dispatch/inbound/jobs/JOB_UUID/decline" \
-  -H "Authorization: Bearer KEY" -H "Content-Type: application/json" \
-  -d '{"reason":"User chose not to share"}'
-```
-
-**Ledger:** `dispatch-inbound.md` — **ISO time**, **`jobId`**, **`query`**, **`requesterLabel`**, **status**, **draft answer**, **user decision**.
-
-**Inbound algorithm**
-
-1. **Fetch:** on heartbeat / Dispatch session, **`GET`** `…/inbound/jobs?status=pending` with Bearer (first valid key). Merge into the ledger; **`pending_run`** for new local work. Respect **Pending row cap**.
-2. **Run locally:** **`pending_run`** → answer from **`peeps/`** only → **`awaiting_send_confirm`** with a draft.
-3. **Ask the human:** show **`query`**, **`requesterLabel`**, draft; **send or discard?** No **`POST …/respond`** until **send** is chosen.
-4. **Terminal:** **send** → **`POST …/respond`** with `{"answer":"..."}` → remove row on success. **Discard** → **`POST …/inbound/jobs/{jobId}/decline`** with optional `{"reason":"..."}` so the server does not keep a pending job, then remove the ledger row. **Do not** only delete locally without **`decline`** — that orphans the job server-side. Retry transport errors on later heartbeats until terminal outcome.
-5. **Revocation:** invalid keys or revoked enrollment — stop; surface once; clear per API guidance.
+**Inbound steps:** (1) fetch pending per OpenAPI on heartbeat (first valid key); (2) **`pending_run`** → local draft → **`awaiting_send_confirm`**; (3) explicit user choice; (4) **respond** or **decline** then ledger cleanup; (5) on bad keys / revoked enrollment, stop and surface once per **OpenAPI** / README guidance.
