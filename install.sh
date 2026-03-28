@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SKILL_REPO="https://github.com/Know-Your-People/know-your-people-skill"
-SKILL_RAW="https://raw.githubusercontent.com/Know-Your-People/know-your-people-skill/main"
-SKILLS_DIR="${HOME}/.openclaw/workspace/skills/people"
-PEOPLE_DIR="${HOME}/.openclaw/workspace/people"
+SKILL_REPO="git@github.com:Know-Your-People/peeps-skill.git"
+SKILL_RAW="https://raw.githubusercontent.com/Know-Your-People/peeps-skill/main"
+SKILLS_DIR="${HOME}/.openclaw/workspace/skills/peeps"
+PEEPS_DIR="${HOME}/.openclaw/workspace/peeps"
 
 # Colors
 GREEN='\033[0;32m'
@@ -13,7 +13,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 echo ""
-echo "  Know Your People — OpenClaw Skill Installer"
+echo "  Peeps — OpenClaw Skill Installer"
 echo "  ──────────────────────────────────────────"
 echo ""
 
@@ -46,16 +46,16 @@ done
 
 echo -e "${GREEN}✓ Skill installed to ${SKILLS_DIR}${NC}"
 
-# Create people directory if it doesn't exist
-if [ ! -d "$PEOPLE_DIR" ]; then
-  mkdir -p "$PEOPLE_DIR"
-  echo -e "${GREEN}✓ Created ${PEOPLE_DIR}${NC}"
+# Create workspace/peeps directory if it doesn't exist
+if [ ! -d "$PEEPS_DIR" ]; then
+  mkdir -p "$PEEPS_DIR"
+  echo -e "${GREEN}✓ Created ${PEEPS_DIR}${NC}"
 else
-  echo -e "${GREEN}✓ ${PEOPLE_DIR} already exists${NC}"
+  echo -e "${GREEN}✓ ${PEEPS_DIR} already exists${NC}"
 fi
 
-# Create .peopleconfig.yml if it doesn't exist
-CONFIG_FILE="${PEOPLE_DIR}/.peopleconfig.yml"
+# Create peepsconfig.yml if it doesn't exist
+CONFIG_FILE="${PEEPS_DIR}/peepsconfig.yml"
 if [ ! -f "$CONFIG_FILE" ]; then
   echo ""
   read -r -p "  Your full name (e.g. Jane Smith): " OWNER_NAME
@@ -67,7 +67,7 @@ enclaves: []
 endpoint: null
 EOF
   echo -e "${GREEN}✓ Created ${CONFIG_FILE} (owner: ${OWNER_SLUG})${NC}"
-  echo -e "${YELLOW}  Remember to create your own contact file: ${PEOPLE_DIR}/${OWNER_SLUG}.md${NC}"
+  echo -e "${YELLOW}  Remember to create your own contact file: ${PEEPS_DIR}/${OWNER_SLUG}.md${NC}"
 else
   echo -e "${GREEN}✓ ${CONFIG_FILE} already exists${NC}"
 fi

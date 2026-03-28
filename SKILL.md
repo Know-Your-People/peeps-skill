@@ -1,20 +1,20 @@
 ---
-name: Know Your People
+name: Peeps
 description: Private people intelligence — track who you know, what they're good at, and who should meet who. Built for finding the right person at the right time. Use when adding people contacts or searching your network by skill or interest, considering introductions.
 metadata: { "openclaw": { "emoji": "👥", "os": ["linux", "darwin", "win32"] } }
 ---
 
 ## Data Location
 
-All contact files live in `~/.openclaw/workspace/people/` - inside the workspace. On first use, create it: `mkdir -p ~/.openclaw/workspace/people/`
+All contact files live in `~/.openclaw/workspace/peeps/` - inside the workspace. On first use, create it: `mkdir -p ~/.openclaw/workspace/peeps/`
 
 ## Owner self-entry
 
-The owner's own contact file (slug derived from `.peopleconfig.yml` `owner` field without .md) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
+The owner's own contact file (slug derived from `peepsconfig.yml` `owner` field without .md) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
 
 ## Actions File
 
-`~/.openclaw/workspace/people/actions.md` — the pending actions queue. Check this during morning briefings.
+`~/.openclaw/workspace/peeps/actions.md` — the pending actions queue. Check this during morning briefings.
 
 - **Catch-ups:** people `owner` wants to reconnect with. Add when he says "we should catch up with David" or similar.
 - **Introductions:** intros to facilitate. Always include a pre-generated draft intro message (using `owner` and both contact files for context). Format: `Person A → Person B — reason` followed by the intro text as a plain indented paragraph (no "Draft:" label, no quotes, no formatting).
@@ -31,9 +31,9 @@ To keep context lean as the file grows:
 - **Pending intros:** keep until explicitly marked done or cancelled — intro intent doesn't expire
 - Apply this cleanup silently on every read. No need to announce.
 
-## Dataset Config — `.peopleconfig.yml`
+## Dataset Config — `peepsconfig.yml`
 
-`~/.openclaw/workspace/people/.peopleconfig.yml` is the dataset config file. Read it at the start of any session involving this skill.
+`~/.openclaw/workspace/peeps/peepsconfig.yml` is the dataset config file. Read it at the start of any session involving this skill.
 
 ```yaml
 owner: jane-smith # slug of the owner's contact file (without .md)
@@ -160,13 +160,13 @@ Examples:
 ## Folder Structure
 
 ```
-~/.openclaw/workspace/people/
+~/.openclaw/workspace/peeps/
 ├── maria-garcia.md
 ├── john-smith.md
 └── deceased/         # for people who have passed
 ```
 
-All contact files live directly in `~/.openclaw/workspace/people/`. Move people who passed to `deceased/`.
+All contact files live directly in `~/.openclaw/workspace/peeps/`. Move people who passed to `deceased/`.
 
 ## Search and Retrieval
 
@@ -174,13 +174,13 @@ Use `grep` for fast fuzzy scanning. Always expand the query into related terms u
 
 ```bash
 # Find matching contacts (returns filenames)
-grep -ril "keyword\|synonym\|related" ~/.openclaw/workspace/people/
+grep -ril "keyword\|synonym\|related" ~/.openclaw/workspace/peeps/
 
 # Find matching lines with context
-grep -iH "keyword\|synonym" ~/.openclaw/workspace/people/*.md
+grep -iH "keyword\|synonym" ~/.openclaw/workspace/peeps/*.md
 
 # Find contacts open to introductions
-grep -rl "Intro willingness.*Open" ~/.openclaw/workspace/people/
+grep -rl "Intro willingness.*Open" ~/.openclaw/workspace/peeps/
 ```
 
 **Keyword expansion examples — always broaden like this:**

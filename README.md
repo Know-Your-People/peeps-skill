@@ -1,8 +1,8 @@
-# Know Your People 👥
+# Peeps 👥
 
 > *Your network is bigger than you think. Most of it is just invisible when you need it.*
 
-**Know Your People** is an open-source skill for [OpenClaw](https://openclaw.ai) that turns the people you know into a private, searchable record — kept on your machine, owned by you.
+**Peeps** is an open-source skill for [OpenClaw](https://openclaw.ai) that turns the people you know into a private, searchable record — kept on your machine, owned by you.
 
 No CRM. No app. No feed. Just files and your AI agent.
 
@@ -16,7 +16,7 @@ No CRM. No app. No feed. Just files and your AI agent.
 - **Drafts intros** — "connect Peter and Shaurya, they should meet"
 
 ```
-~/.openclaw/peeps/
+~/.openclaw/workspace/peeps/
   leo-lau.md
   peter-boeckel.md
   shaurya-srivastava.md

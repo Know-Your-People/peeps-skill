@@ -2,10 +2,10 @@
 _meta.json
 
 # Local data — never commit to skill repo
-# Data lives in ~/people/ (outside the skill folder)
+# Data lives in ~/.openclaw/workspace/peeps/ (outside the skill folder)
 # and should never be mixed with skill code
 data/
-people/
+peeps/
 contacts/
 *.db
 *.sqlite
