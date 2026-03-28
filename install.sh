@@ -63,8 +63,8 @@ if [ ! -f "$CONFIG_FILE" ]; then
   OWNER_SLUG=$(echo "$OWNER_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
   cat > "$CONFIG_FILE" << EOF
 owner: ${OWNER_SLUG}
-enclaves: []
-endpoint: null
+dispatch-api: api.peepsapp.ai
+enclaves: [key1, key2, key3]
 EOF
   echo -e "${GREEN}✓ Created ${CONFIG_FILE} (owner: ${OWNER_SLUG})${NC}"
   echo -e "${YELLOW}  Remember to create your own contact file: ${PEEPS_DIR}/${OWNER_SLUG}.md${NC}"
