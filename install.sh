@@ -10,7 +10,28 @@ PEEPS_DIR="${HOME}/.openclaw/workspace/peeps"
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 RED='\033[0;31m'
+BOLD='\033[1m'
 NC='\033[0m'
+
+# Discord invite — blurple (#7289DA) → fuchsia (#EB459E) truecolor gradient on the URL
+DISCORD_URL='https://discord.gg/q3zVtnYnGY'
+print_discord_line() {
+  local i len=${#DISCORD_URL} r g b p ch
+  printf '  %s💬%s %sJoin the community on Discord:%s ' "$YELLOW" "$NC" "$BOLD" "$NC"
+  for ((i = 0; i < len; i++)); do
+    ch=${DISCORD_URL:i:1}
+    if ((len > 1)); then
+      p=$((i * 1000 / (len - 1)))
+    else
+      p=0
+    fi
+    r=$((114 + (235 - 114) * p / 1000))
+    g=$((137 + (69 - 137) * p / 1000))
+    b=$((218 + (250 - 218) * p / 1000))
+    printf '\033[38;2;%d;%d;%dm%s' "$r" "$g" "$b" "$ch"
+  done
+  printf '%s\n' "$NC"
+}
 
 echo ""
 echo "  Peeps — OpenClaw Skill Installer"
@@ -116,6 +137,6 @@ echo '  "Who do I know in fintech in Singapore?"'
 echo '  "Draft an intro between Peter and Shaurya."'
 echo ""
 echo "  Early access to Dispatch: https://peepsapp.ai/skill"
-echo "  Join the community on Discord: https://discord.gg/q3zVtnYnGY"
+print_discord_line
 echo "  Source: ${SKILL_REPO}"
 echo ""
