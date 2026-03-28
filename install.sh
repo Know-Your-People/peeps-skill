@@ -80,6 +80,7 @@ echo '  "Add Leo Lawrence — we just met at a design event."'
 echo '  "Who do I know in fintech in Singapore?"'
 echo '  "Draft an intro between Peter and Shaurya."'
 echo ""
-echo "  Enclave access (early): https://peepsapp.ai/skill"
+echo "  Early access to Dispatch: https://peepsapp.ai/skill"
+echo "  Join the community on Discord: https://discord.gg/q3zVtnYnGY"
 echo "  Source: ${SKILL_REPO}"
 echo ""
