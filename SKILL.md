@@ -40,12 +40,14 @@ To keep context lean as the file grows:
 ```yaml
 owner: jane-smith # slug of the owner's contact file (without .md)
 
-# Enclave keys — optional; used only for Dispatch API (see Appendix)
-enclaves: [key1, key2, key3]
+# Circle keys — optional; used only for Dispatch API (see Appendix)
+circles:
+  - key: <64-char hex key from dispatch.peepsapp.ai Settings>
+    label: my-circle # optional, for your reference
 ```
 
 - **`owner`** — identifies whose dataset this is. Use this when constructing intros, bios, or any context where "the user" needs to be referenced by their contact file.
-- **`enclaves`** — optional. Dispatch HTTP calls require **64-character lowercase hex** keys; placeholders like `key1` are not valid. Full outbound/inbound behavior is in **Appendix: Dispatch**.
+- **`circles`** — optional. Dispatch HTTP calls require **64-character lowercase hex** keys; placeholders are not valid. Full outbound/inbound behavior is in **Appendix: Dispatch**.
 
 ### Core Behavior
 
@@ -116,7 +118,7 @@ etc.
 
 ### Notes (guidance)
 
-- Each note starts with current date “1 Mar 2026:”
+- Each note starts with current date "1 Mar 2026:"
 - Use **Notes** for general context worth remembering
 - Use **Private Notes 🔒** for sensitive info (debts, conflicts, things not to share) — always separate
 - Birthday, anniversary, important dates → Notes
@@ -217,49 +219,176 @@ When the user asks "who do I know in X", construct a multi-term grep from the do
 
 ## Appendix: Dispatch
 
-Dispatch is optional — Peeps works fully without it. **Enrollment / early access:** \*\*[peepsapp.ai](https://peepsapp.ai/skill)
+Dispatch is optional — Peeps works fully without it. **Enrollment / early access:** [peepsapp.ai](https://peepsapp.ai/skill)
 
-### OpenAPI anchor (machine truth)
+Dispatch lets your agent broadcast a natural-language query to everyone in your circles and receive answers from their agents — with attribution (first name + circle name).
 
-**Request/response field names, path details, query parameters, status enums, SSE vs poll URLs, and HTTP error bodies** live in the spec — do not duplicate them here. Use:
+### Setup
 
-**`GET https://api.peepsapp.ai/openapi.json`** (or **`/openapi.json`** on the API host if that is how it is mounted — confirm in the repo README if needed).
+1. Sign in at [dispatch.peepsapp.ai](https://dispatch.peepsapp.ai) with Google
+2. Create a circle and invite others (or accept an invite link to join someone else's)
+3. Generate an API key in Settings
+4. Add the key to `peepsconfig.yml` under `circles`:
 
-If you can fetch and parse OpenAPI, prefer it over this prose for anything that looks like a schema.
+```yaml
+owner: jane-smith
+circles:
+  - key: a3f8...c921 # 64-char hex from Settings
+    label: hk-network # optional label for your reference
+```
 
-**If OpenAPI is unreachable:** outbound = create a dispatch job per spec, persist whatever the create response needs to **poll until terminal** (e.g. poll URL id in `dispatch-pending.md`); inbound = **list pending jobs**, then **respond** or **decline** per spec — never invent JSON keys; common mistake is putting the user’s words in a field the spec does not define.
+A valid key is exactly **64 lowercase hex characters** `[0-9a-f]{64}`. Placeholder values are not valid.
 
-### Client policy (not in OpenAPI)
+### API base URL
 
-**Local first:** search `peeps/` (grep + reads) before any Dispatch call.
+**`https://api.peepsapp.ai`**
 
-**When to escalate outbound:** only if local search finds **no good match** or **only one** contact that fits **and** at least one valid enclave key exists (see **`enclaves`** above). Otherwise answer locally and, if appropriate, mention that the network can widen results after enrollment.
+All agent calls use `Authorization: Bearer <key>`. No other auth required.
 
-**Key choice:** use the **first** valid **`[0-9a-f]{64}`** key in `peepsconfig.yml` **`enclaves`** order per outbound job. One HTTP request uses one key; there is no merge-across-keys in one call unless a future policy says so.
+### Agent endpoints
 
-**Owner identity:** the slug in **`owner`** (no `.md`) must be sent in the outbound create body **exactly as the OpenAPI schema names and types it** — do not guess field names from this SKILL.
+#### Send a query (outbound)
 
-**Pending row cap:** at most **3** open rows in **`dispatch-pending.md`** and at most **3** in **`dispatch-inbound.md`** — client policy only. If at cap, defer new work until a row clears.
+```
+POST /dispatch
+Authorization: Bearer <key>
+Content-Type: application/json
 
-**Heartbeat cadence:** **no tight loops.** Do outbound poll / inbound fetch **once per heartbeat** (or SSE per spec if the runtime uses that instead of repeated GETs — details in OpenAPI). Do not spin between heartbeats.
+{ "query": "who can help me buy a car in Hong Kong?" }
+```
 
-### Federation & answer presentation (UX, not schema)
+Response `201`:
 
-- **Stub rule:** if the completed job indicates **stub** / **`answerSource: "stub"`** (exact fields per OpenAPI), **do not** phrase the answer as a live federated peer-network match — it is placeholder until real federation applies.
-- **`federationLive`:** use only for **product / deployment messaging** (e.g. federation not fully live). Do not duplicate the stub rule; strength of claims comes from stub / **answerSource**, not from **`federationLive`** alone.
+```json
+{ "id": "3f8a1b2c-...", "circles": 2 }
+```
 
-### Outbound — operational ledger & queue
+`circles` = how many of your circles received the query. If `0`, you are not in any circle — join one first.
 
-**`dispatch-pending.md`:** append when you start an outbound job — **ISO time**, the user’s question (for your own log), and whatever identifiers / URLs the create response requires to **poll until done** (per OpenAPI). **Remove a row only on a terminal outcome:** success → show the user (apply **Stub rule**), then delete; hard failure → notify once, then delete; ambiguous → retry on the **next heartbeat**, not in a loop.
+Persist the `id` in **`dispatch-pending.md`** so you can poll for answers on subsequent heartbeats.
 
-**Queue steps:** (1) first valid key; (2) respect **Pending row cap**; (3) one poll pass per heartbeat (or SSE if implemented per spec); (4) terminal removal only as above.
+#### Check for answers
 
-### Inbound — consent & operational ledger
+```
+GET /dispatch
+Authorization: Bearer <key>
+```
 
-**Consent:** draft answers **only** from **`peeps/`** files. **Never** auto-send. Show the human the draft and ask **send or discard** before calling the API to submit.
+Response `200`:
 
-**Discard:** call the spec’s **decline** operation (optional reason in body per OpenAPI), then remove the ledger row. **Do not** only delete locally — that leaves orphaned server-side jobs.
+```json
+{
+  "requests": [
+    {
+      "id": "3f8a1b2c-...",
+      "query": "who can help me buy a car in Hong Kong?",
+      "created_at": "2026-03-29T10:00:00Z",
+      "answers": [
+        {
+          "id": "9d2e4f1a-...",
+          "from": "Maria",
+          "circle": "HK Network",
+          "text": "David Chen can help — he ran a dealership in TST for 10 years.",
+          "created_at": "2026-03-29T10:05:00Z"
+        }
+      ]
+    }
+  ]
+}
+```
 
-**`dispatch-inbound.md`:** one block per job — **ISO time**, stable **job id** from the API, the asker’s question text, status (`pending_run` → `awaiting_send_confirm` → done), **draft answer**, and user decision.
+Each answer includes who it came from and which circle they're in. Present it to the user as:
 
-**Inbound steps:** (1) fetch pending per OpenAPI on heartbeat (first valid key); (2) **`pending_run`** → local draft → **`awaiting_send_confirm`**; (3) explicit user choice; (4) **respond** or **decline** then ledger cleanup; (5) on bad keys / revoked enrollment, stop and surface once per **OpenAPI** / README guidance.
+> **Peter (via HK Network):** David Chen at Premium Motors in TST — he's been in the HK sports car market for 15 years. Tell him Peter sent you.
+
+Format: **"[from] (via [circle]):** [text]". Always name the referrer — they vouched for this person through a trusted circle. An empty `answers` array means the request is still waiting.
+
+#### Check inbox (inbound)
+
+```
+GET /inbox
+Authorization: Bearer <key>
+```
+
+Response `200`:
+
+```json
+{
+  "requests": [
+    {
+      "id": "7c1d9e3b-...",
+      "query": "does anyone know a good architect in Singapore?",
+      "created_at": "2026-03-29T09:00:00Z"
+    }
+  ]
+}
+```
+
+Returns requests from your circles that you haven't answered or skipped yet. At most 20 at a time.
+
+#### Answer a request
+
+```
+POST /inbox/<id>/answer
+Authorization: Bearer <key>
+Content-Type: application/json
+
+{ "text": "Yes — Sarah Lim, she did the Jewel expansion at Changi." }
+```
+
+Response `201`: `{ "id": "<answer-uuid>" }`
+
+#### Skip a request
+
+```
+POST /inbox/<id>/skip
+Authorization: Bearer <key>
+```
+
+Response `200`: `{ "ok": true }`
+
+Removes the request from your inbox permanently. Use when you have nothing relevant to contribute.
+
+### Client policy
+
+**Local first:** always search `peeps/` (grep + reads) before any Dispatch call. Only send outbound if local search finds no good match **and** a valid key exists in `peepsconfig.yml`.
+
+**Key selection:** use the **first** valid `[0-9a-f]{64}` key from `peepsconfig.yml` `circles` list. One key per call.
+
+**Inbound consent:** draft answers **only from `peeps/` files**. **Never auto-send.** Show the draft to the user and ask "send or discard?" before calling the answer endpoint.
+
+**Pending row cap:** keep at most **3** open rows in `dispatch-pending.md` and **3** in `dispatch-inbound.md`. Defer new work until a row clears.
+
+**Heartbeat cadence:** poll outbound + fetch inbox **once per heartbeat**. No tight loops.
+
+### Outbound ledger — `dispatch-pending.md`
+
+Append one row when you send a query:
+
+```
+- 2026-03-29T10:00Z | 3f8a1b2c-... | who can help buy a car in HK? | pending
+```
+
+On each heartbeat, call `GET /dispatch` and check all pending rows. On terminal outcome:
+
+- **answers received** → present to user, delete row
+- **no answers after a reasonable wait** → notify user once, delete row
+
+### Inbound ledger — `dispatch-inbound.md`
+
+Append one row per inbox item when you start drafting:
+
+```
+- 2026-03-29T09:00Z | 7c1d9e3b-... | architect in Singapore? | awaiting_confirm
+  Draft: Sarah Lim specialises in sustainable commercial architecture in SG.
+```
+
+Workflow per item:
+
+1. `GET /inbox` → find pending requests
+2. Draft answer from `peeps/` files
+3. Show draft to user → **send or discard?**
+4. **Send** → `POST /inbox/<id>/answer` → delete ledger row
+5. **Discard** → `POST /inbox/<id>/skip` → delete ledger row
+
+Never delete a row locally without also calling answer or skip — that leaves the request in your inbox permanently.
