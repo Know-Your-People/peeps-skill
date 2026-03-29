@@ -83,21 +83,25 @@ if [ ! -f "$CONFIG_FILE" ]; then
   # Derive slug: lowercase, replace spaces with hyphens
   OWNER_SLUG=$(echo "$OWNER_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
-  ENCLAVE_KEYS=()
+  CIRCLE_KEYS=()
+  CIRCLE_LABELS=()
   echo ""
-  echo "  Enclave keys (optional — Peeps Dispatch / api.peepsap.ai)."
-  read -r -p "  Enclave key, or press Enter to skip: " FIRST_KEY
+  echo "  Circles (optional — connect Peeps Dispatch / api.peepsapp.ai)."
+  echo "  Add the circle key from your Dispatch or Peeps app Settings (64-character hex)."
+  read -r -p "  Circle key, or press Enter to skip: " FIRST_KEY
   if [ -n "$FIRST_KEY" ]; then
     KEY="$FIRST_KEY"
     while true; do
-      ENCLAVE_KEYS+=("$KEY")
+      read -r -p "  Optional label for this circle (e.g. hk-network), or Enter to skip: " LABEL
+      CIRCLE_KEYS+=("$KEY")
+      CIRCLE_LABELS+=("$LABEL")
       echo ""
-      echo "  1) Add another key"
+      echo "  1) Add another circle"
       echo "  2) Finish"
-      read -r -p "  Choice [1-2, default 2]: " ENCLAVE_MENU
-      ENCLAVE_MENU=${ENCLAVE_MENU:-2}
-      if [ "$ENCLAVE_MENU" = "1" ]; then
-        read -r -p "  Enclave key: " KEY
+      read -r -p "  Choice [1-2, default 2]: " CIRCLE_MENU
+      CIRCLE_MENU=${CIRCLE_MENU:-2}
+      if [ "$CIRCLE_MENU" = "1" ]; then
+        read -r -p "  Circle key: " KEY
         if [ -z "$KEY" ]; then
           echo -e "${YELLOW}  Empty key — finishing.${NC}"
           break
@@ -110,16 +114,22 @@ if [ ! -f "$CONFIG_FILE" ]; then
 
   {
     echo "owner: ${OWNER_SLUG}"
-    if [ ${#ENCLAVE_KEYS[@]} -eq 0 ]; then
-      echo "enclaves: []"
+    if [ ${#CIRCLE_KEYS[@]} -eq 0 ]; then
+      echo "circles: []"
     else
-      echo "enclaves:"
-      for KEY in "${ENCLAVE_KEYS[@]}"; do
+      echo "circles:"
+      i=0
+      for KEY in "${CIRCLE_KEYS[@]}"; do
         ESC_KEY=$(printf '%s' "$KEY" | sed "s/'/''/g")
-        echo "  - '${ESC_KEY}'"
+        echo "  - key: '${ESC_KEY}'"
+        LABEL="${CIRCLE_LABELS[$i]}"
+        if [ -n "$LABEL" ]; then
+          ESC_LABEL=$(printf '%s' "$LABEL" | sed "s/'/''/g")
+          echo "    label: '${ESC_LABEL}'"
+        fi
+        i=$((i + 1))
       done
     fi
-    echo "endpoint: null"
   } > "$CONFIG_FILE"
 
   echo -e "${GREEN}✓ Created ${CONFIG_FILE} (owner: ${OWNER_SLUG})${NC}"

@@ -42,7 +42,7 @@ owner: jane-smith # slug of the owner's contact file (without .md)
 
 # Circle keys — optional; used only for Dispatch API (see Appendix)
 circles:
-  - key: <64-char hex key from dispatch.peepsapp.ai Settings>
+  - key: <circle key from dispatch.peepsapp.ai Settings — 64-char hex>
     label: my-circle # optional, for your reference
 ```
 
@@ -227,13 +227,13 @@ Dispatch lets your agent broadcast a natural-language query to everyone in your 
 
 1. Sign in at [dispatch.peepsapp.ai](https://dispatch.peepsapp.ai) with Google
 2. Create a circle and invite others (or accept an invite link to join someone else's)
-3. Generate an API key in Settings
-4. Add the key to `peepsconfig.yml` under `circles`:
+3. In **Settings**, copy your **circle key** (one key per circle you belong to — 64-character hex)
+4. Add it under **`circles`** in `peepsconfig.yml` (optional **`label`** is only for your notes):
 
 ```yaml
 owner: jane-smith
 circles:
-  - key: a3f8...c921 # 64-char hex from Settings
+  - key: a3f8...c921 # circle key from Settings (64-char hex)
     label: hk-network # optional label for your reference
 ```
 
