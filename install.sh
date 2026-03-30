@@ -90,54 +90,7 @@ if [ ! -f "$CONFIG_FILE" ]; then
   # Derive slug: lowercase, replace spaces with hyphens
   OWNER_SLUG=$(echo "$OWNER_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
-  CIRCLE_KEYS=()
-  CIRCLE_LABELS=()
-  echo ""
-  echo "  Circles (optional — connect Peeps Dispatch / api.peepsapp.ai)."
-  echo "  Add the circle key from your Dispatch or Peeps app Settings (64-character hex)."
-  read -r -p "  Circle key, or press Enter to skip: " FIRST_KEY
-  if [ -n "$FIRST_KEY" ]; then
-    KEY="$FIRST_KEY"
-    while true; do
-      read -r -p "  Optional label for this circle (e.g. hk-network), or Enter to skip: " LABEL
-      CIRCLE_KEYS+=("$KEY")
-      CIRCLE_LABELS+=("$LABEL")
-      echo ""
-      echo "  1) Add another circle"
-      echo "  2) Finish"
-      read -r -p "  Choice [1-2, default 2]: " CIRCLE_MENU
-      CIRCLE_MENU=${CIRCLE_MENU:-2}
-      if [ "$CIRCLE_MENU" = "1" ]; then
-        read -r -p "  Circle key: " KEY
-        if [ -z "$KEY" ]; then
-          echo -e "${YELLOW}  Empty key — finishing.${NC}"
-          break
-        fi
-      else
-        break
-      fi
-    done
-  fi
-
-  {
-    echo "owner: ${OWNER_SLUG}"
-    if [ ${#CIRCLE_KEYS[@]} -eq 0 ]; then
-      echo "circles: []"
-    else
-      echo "circles:"
-      i=0
-      for KEY in "${CIRCLE_KEYS[@]}"; do
-        ESC_KEY=$(printf '%s' "$KEY" | sed "s/'/''/g")
-        echo "  - key: '${ESC_KEY}'"
-        LABEL="${CIRCLE_LABELS[$i]}"
-        if [ -n "$LABEL" ]; then
-          ESC_LABEL=$(printf '%s' "$LABEL" | sed "s/'/''/g")
-          echo "    label: '${ESC_LABEL}'"
-        fi
-        i=$((i + 1))
-      done
-    fi
-  } > "$CONFIG_FILE"
+  echo "owner: ${OWNER_SLUG}" > "$CONFIG_FILE"
 
   echo -e "${GREEN}✓ Created ${CONFIG_FILE} (owner: ${OWNER_SLUG})${NC}"
   echo -e "${YELLOW}  Remember to create your own contact file: ${PEEPS_DIR}/${OWNER_SLUG}.md${NC}"
@@ -147,13 +100,18 @@ fi
 
 echo ""
 echo "  ──────────────────────────────────────────"
-echo -e "  ${GREEN}All done.${NC} Start talking to your contacts:"
+echo -e "  ${GREEN}Peeps installed.${NC} Start talking to your contacts:"
 echo ""
 echo '  "Add Leo Lawrence — we just met at a design event."'
 echo '  "Who do I know in fintech in Singapore?"'
 echo '  "Draft an intro between Peter and Shaurya."'
 echo ""
-echo "  Early access to Dispatch: https://peepsapp.ai/skill"
 print_discord_line
 echo "  Source: ${SKILL_REPO}"
 echo ""
+
+# Install Dispatch skill (handles circle key setup and migration from any existing peepsconfig.yml)
+echo "  ──────────────────────────────────────────"
+echo -e "  ${BOLD}Installing Dispatch skill...${NC}"
+echo ""
+curl -fsSL https://raw.githubusercontent.com/Know-Your-People/dispatch-skill/main/install.sh | bash
