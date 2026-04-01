@@ -94,7 +94,7 @@ fi
 CONFIG_FILE="${PEEPS_DIR}/peepsconfig.yml"
 if [ ! -f "$CONFIG_FILE" ]; then
   echo ""
-  read -r -p "  Your full name (e.g. Jane Smith): " OWNER_NAME
+  read -r -p "  Your full name (e.g. Jane Smith): " OWNER_NAME < /dev/tty
   # Derive slug: lowercase, replace spaces with hyphens
   OWNER_SLUG=$(echo "$OWNER_NAME" | tr '[:upper:]' '[:lower:]' | tr ' ' '-' | tr -cd 'a-z0-9-')
 
@@ -117,9 +117,3 @@ echo ""
 print_discord_line
 echo "  Source: $(link "$SKILL_REPO")"
 echo ""
-
-# Install Dispatch skill (handles circle key setup and migration from any existing peepsconfig.yml)
-echo "  ──────────────────────────────────────────"
-echo -e "  ${BOLD}Installing Dispatch skill...${NC}"
-echo ""
-curl -fsSL https://raw.githubusercontent.com/Know-Your-People/dispatch-skill/main/install.sh | bash
