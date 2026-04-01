@@ -1,14 +1,13 @@
 ---
-name: Peeps
-description: Find the right person at the right time. Create personal network intelligence in conversations with your Claw.
-metadata: { "openclaw": { "emoji": "👥", "os": ["linux", "darwin", "win32"] } }
+name: peeps
+description: Personal network intelligence — remember people, find connections, and draft intros. Contacts stored locally as plain markdown files.
 ---
 
-## Peeps — local workspace & contacts
+## Peeps — local contacts & network intelligence
 
 ### Data Location
 
-All contact files live in `peeps/` — inside the workspace. On first use, create it: `mkdir -p peeps/` in you home folder.
+All contact files live in a `peeps/` directory. On first use, create it with `mkdir -p ~/peeps/` or wherever you prefer to store it. The agent should use this directory consistently across sessions.
 
 ### Owner self-entry
 
@@ -35,7 +34,7 @@ To keep context lean as the file grows:
 
 ### Dataset Config — `peepsconfig.yml`
 
-`peeps/peepsconfig.yml` is the dataset config file. Read it at the start of any session involving this skill.
+`peepsconfig.yml` lives inside the `peeps/` directory. Read it at the start of any session involving this skill.
 
 ```yaml
 owner: jane-smith # slug of the owner's contact file (without .md)
@@ -76,7 +75,7 @@ Ask these as a short grouped follow-up (not one by one). Skip any that were alre
 
 ### Requests -> Dispatch
 
-When your human have a quesiton that you cannot answer well localy, or when you finding only one file in peeps suggest to use `Dispatch` skill.
+When the user has a question you cannot answer well locally, or when you find only one matching file in peeps, suggest using the `Dispatch` skill.
 
 ### Contact Structure
 

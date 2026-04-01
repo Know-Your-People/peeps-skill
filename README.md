@@ -2,7 +2,7 @@
 
 > _Your network is bigger than you think. Most of it is just invisible when you need it._
 
-**Peeps** is an open-source skill for [OpenClaw](https://openclaw.ai) that turns the people you know into a private, searchable record — kept on your machine, owned by you.
+**Peeps** is an open-source agent skill that turns the people you know into a private, searchable record — kept on your machine, owned by you.
 
 No CRM. No app. No feed. Just files and your AI agent.
 
@@ -16,7 +16,7 @@ No CRM. No app. No feed. Just files and your AI agent.
 - **Drafts intros** — "connect Peter and Shaurya, they should meet"
 
 ```
-~/.openclaw/workspace/peeps/
+~/peeps/
   leo-lau.md
   peter-boeckel.md
   shaurya-srivastava.md
@@ -28,10 +28,16 @@ No CRM. No app. No feed. Just files and your AI agent.
 ## Install
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/Know-Your-People/know-your-people-skill/main/install.sh | bash
+npx skills add Know-Your-People/peeps-skill
 ```
 
-Requires [OpenClaw](https://openclaw.ai). That's it.
+Works with Cursor, Claude Code, Codex, OpenCode, GitHub Copilot, and [40+ more agents](https://github.com/vercel-labs/skills#supported-agents).
+
+**OpenClaw users** get an enhanced setup (workspace config, contact directory):
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Know-Your-People/peeps-skill/main/install.sh | bash
+```
 
 ---
 
