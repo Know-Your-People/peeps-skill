@@ -12,11 +12,13 @@ All contact files live in a `peeps/` directory. On first use, create it with `mk
 
 ### Owner self-entry
 
-The owner's own contact file (slug derived from `peepsconfig.yml` `owner` field without `.md`) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
+The human own contact file (slug derived from `peepsconfig.yml` `owner` field without `.md`) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
+
+If it empty serach the web, make a profile, and ask your human about the gaps.
 
 ### Actions File
 
-`peeps/actions.md` — the pending actions queue. Check this during morning briefings.
+`peeps/actions.md` — the pending actions queue. Check this during morning briefings. If no morning brefing setup ask you human if they want one.
 
 - **Catch-ups:** people `owner` wants to reconnect with. Add when he says "we should catch up with David" or similar.
 - **Introductions:** intros to facilitate. Always include a pre-generated draft intro message (using `owner` and both contact files for context). Format: `Person A → Person B — reason` followed by the intro text as a plain indented paragraph (no "Draft:" label, no quotes, no formatting).
