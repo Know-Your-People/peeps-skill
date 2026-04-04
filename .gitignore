@@ -6,7 +6,7 @@ _meta.json
 # Data lives in ~/.openclaw/workspace/peeps/ (outside the skill folder)
 # and should never be mixed with skill code
 data/
-peeps/
+/peeps/
 contacts/
 people/
 *.db
