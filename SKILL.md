@@ -4,7 +4,7 @@ description: Personal network intelligence — remember people, find connections
 metadata: { "openclaw": { "emoji": "👥", "os": ["linux", "darwin", "win32"] } }
 ---
 
-## Peeps — local contacts & network intelligence
+## 👥 Peeps — local contacts & network intelligence
 
 ### Data Location
 
@@ -55,7 +55,7 @@ owner: jane-smith # slug of the owner's contact file (without .md)
 ### Core Behavior
 
 - User mentions a person → check if a contact file exists, search the web if not, offer to create/update
-- User asks "who do I know in [domain/skill/location]?" → search locally first; if Dispatch skill is installed, it may broadcast outbound per its own rules
+- User asks "who do I know in [domain/skill/location]?" → search locally first; if Haah skill is installed, it may broadcast outbound per its own rules
 - User asks about someone → surface insights from their file with relevant context
 - User wants to make an intro → draft it using both contact files + owner profile
 
