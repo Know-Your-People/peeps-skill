@@ -31,7 +31,13 @@ peeps/
 npx skills add Know-Your-People/peeps-skill
 ```
 
-Works with OpenClaw, Hermes, Cursor, Claude Code, Codex, OpenCode, GitHub Copilot, and [40+ more agents](https://github.com/vercel-labs/skills#supported-agents).
+Works with OpenClaw, Cursor, Claude Code, Codex, OpenCode, GitHub Copilot, and [40+ more agents](https://github.com/vercel-labs/skills#supported-agents).
+
+### Hermes
+
+```bash
+hermes skills install peeps
+```
 
 ---
 
