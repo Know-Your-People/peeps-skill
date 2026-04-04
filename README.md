@@ -70,4 +70,4 @@ MIT. Take it, fork it, build on it.
 
 ---
 
-**Designed by Ilya Belikin @ Know Your People**
+*Designed by Ilya Belikin @ Know Your People*
