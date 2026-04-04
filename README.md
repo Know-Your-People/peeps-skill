@@ -70,4 +70,4 @@ MIT. Take it, fork it, build on it.
 
 ---
 
-*Built by [Posit](https://posit.place) · Powered by [OpenClaw*](https://openclaw.ai)
+**Designed by Ilya Belikin @ Know Your People**
