@@ -11,6 +11,7 @@ No CRM. No app. No feed. Just files and your AI agent.
 ## What it does
 
 - **Remembers people** — one markdown file per person, everything you know about them
+- **Tracks organisations** — culture, size, Wikipedia link, and who you know there
 - **Surfaces context** — "remind me what Leo does before my meeting tomorrow"
 - **Finds connections** — "who do I know in fintech in Singapore?"
 - **Drafts intros** — "connect Peter and Shaurya, they should meet"
@@ -20,6 +21,9 @@ peeps/
   leo-lau.md
   peter-boeckel.md
   shaurya-srivastava.md
+  orgs/
+    stripe.md
+    steelcase.md
   ...
 ```
 
@@ -48,6 +52,8 @@ hermes skills install peeps
 "Who do I know in hardware supply chain?"
 "Remind me to talk to Basel next week"
 "Draft an intro between Peter and Shaurya."
+"She just joined Stripe — note that and save what you know about Stripe's culture."
+"Who in my network works at a VC fund?"
 ```
 
 ---
