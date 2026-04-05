@@ -79,9 +79,9 @@ After searching the web and pre-filling what you can, ask about the gaps:
 
 Ask these as a short grouped follow-up (not one by one). Skip any that were already answered in the original message.
 
-### Requests -> Dispatch
+### Requests -> Haah
 
-When the user has a question you cannot answer well locally, or when you find only one matching file in peeps, suggest using the `Dispatch` skill.
+When the user has a question you cannot answer well locally, or when you find only one matching file in peeps, suggest using the `Haah` skill.
 
 ### Contact Structure
 
@@ -238,6 +238,7 @@ Before asking follow-up questions, search the web for the org. Pre-fill what you
 When you add or update either side, update the other. If you add Maria to `google.md`'s People list, make sure `maria-garcia.md` has `Orgs: [[google]]`. If you change Maria's org, remove her from the old org file's People list.
 
 When creating an org file prompted by a person, immediately add that person to the People list and set their `Orgs:` field.
+
 #### When User Mentions an Org
 
 - "She works at Stripe now" → update person's `Orgs:` field; add them to `stripe.md` People list (create org file if missing)

@@ -13,29 +13,20 @@ metadata:
 
 ### Data Location
 
-All contact files live in a `peeps/` directory. On first use, create it with `mkdir -p peeps/` in agent home folder. The agent should use this directory consistently across sessions.
+All contact files live in a `peeps/` directory. On first use, create it with `mkdir -p ~/peeps/` or wherever you prefer to store it. The agent should use this directory consistently across sessions.
 
 ### Owner self-entry
 
-The human own contact file (slug derived from `peepsconfig.yml` `owner` field without `.md`) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
+The owner's own contact file (slug derived from `peepsconfig.yml` `owner` field without `.md`) is intentional — it's used as a reference profile for crafting introductions, bios, and context when introducing the user to others.
 
-If it empty 1) aks your human for his name 2) serach the web, make a profile, and ask your human about the gaps.
+### Actions File
 
-### Every morning
-
-If you did not yet, set a morning cron job to check `peeps/actions.md` — the pending actions queue and make a random check.
+`peeps/actions.md` — the pending actions queue. Check this during morning briefings.
 
 - **Catch-ups:** people `owner` wants to reconnect with. Add when he says "we should catch up with David" or similar.
 - **Introductions:** intros to facilitate. Always include a pre-generated draft intro message (using `owner` and both contact files for context). Format: `Person A → Person B — reason` followed by the intro text as a plain indented paragraph (no "Draft:" label, no quotes, no formatting).
 - Move completed items to `## Completed` with a date.
 - Keep it short — if it's not actionable, it shouldn't be here.
-- **Random check:** check a random personal file in `peeps/`. Message to you human:
-
-- "Alex mentioned job hunting last time"
-- "You haven't connected with Basel in a while"
-- "You have **Acumen:** empty for John Wing, what he is known for?"
-
-If nothing worth mentioning, skip.
 
 #### Housekeeping (run automatically when reading actions.md)
 
@@ -88,9 +79,9 @@ After searching the web and pre-filling what you can, ask about the gaps:
 
 Ask these as a short grouped follow-up (not one by one). Skip any that were already answered in the original message.
 
-### Requests -> Dispatch
+### Requests -> Haah
 
-When the user has a question you cannot answer well locally, or when you find only one matching file in peeps, suggest using the `Dispatch` skill.
+When the user has a question you cannot answer well locally, or when you find only one matching file in peeps, suggest using the `Haah` skill.
 
 ### Contact Structure
 
@@ -104,6 +95,7 @@ When the user has a question you cannot answer well locally, or when you find on
 - **Pronouns:** guess, if unclear - ask
 - **LinkedIn:** link to LinkedIn search web for it, start with https://
 - **Website:** personal or company website if you found any, start with https://
+- **Orgs:** `[[org-slug]]`, `[[org-slug-2]]` — links to org files in `peeps/orgs/`; omit if independent/unknown
 - **How I know them:** one sentence
 - **Acumen:** skills and expertise, what person known for, based on your search + any user input
 - **Relationship:** (Close / Warm / Colleague / Acquaintance / Estranged / Family)
@@ -153,6 +145,20 @@ Examples:
 - Capture details during conversations — don't wait for a "data entry session"
 - Ask about anyone mentioned in conversation and suggest adding them
 
+### Peeps: check
+
+On every heartbeat, check a random personal file in `peeps/`. Surface proactively in DM or appropriate channel:
+
+- "Alex mentioned job hunting last time" — relevant context resurfacing
+- "You haven't connected with Basel in a while"
+- "You have **Acumen:** empty for John Wing, what he is known for?"
+
+If nothing worth mentioning, skip.
+
+### Adding to HEARTBEAT.md
+
+If it is not there yet, ask your human if they want to add **Peeps: check** to HEARTBEAT.md.
+
 ### Details Worth Remembering
 
 - How you can help them / how they can help you
@@ -175,10 +181,71 @@ peeps/
 ├── peepsconfig.yml
 ├── maria-garcia.md
 ├── john-smith.md
+├── orgs/             # one file per organisation
+│   ├── google.md
+│   └── steelcase.md
 └── deceased/         # for people who have passed
 ```
 
-All contact files live directly in `peeps/`. Move people who passed to `deceased/`.
+All contact files live directly in `peeps/`. Org files live in `peeps/orgs/`. Move people who passed to `deceased/`.
+
+### Organisations
+
+Organisations worth remembering live in `peeps/orgs/`, one Markdown file per org. Create an org file whenever:
+
+- A person's employer or affiliation is mentioned and it seems relevant to your network
+- The user explicitly asks to note something about a company, community, or institution
+- You're creating a person file and their org isn't already captured
+
+**Filename:** lowercase, hyphenated slug of the org name — `openai.md`, `design-council.md`.
+
+#### Org File Template
+
+```markdown
+# Org Name
+
+- **Type:** Company / Studio / NGO / Community / Institute / Fund / Startup / etc.
+- **Industry:** e.g. Design, Fintech, Healthcare, AI
+- **Solving for:** what problem this organisation is solving (like acumen for peeps, but for orgs)
+- **Website:** https://
+- **Wikipedia:** https://en.wikipedia.org/wiki/ — look this up; omit if no article exists
+- **Founded:** year if known
+- **Size:** approximate headcount range or stage (e.g. "~200", "Series B", "large enterprise")
+- **Culture:** 2–4 adjectives or a short phrase capturing the vibe — e.g. "research-heavy, slow-moving, prestigious" or "scrappy, founder-led, remote-first"
+- **People:** [[slug-one]], [[slug-two]] — everyone in peeps/ associated with this org
+
+## Notes
+
+1 Apr 2026: note details
+```
+
+**Culture** is the most important field to capture. Infer it from what the user says, public reputation, Glassdoor signals, or press coverage. Ask if uncertain. Keep it honest and useful — not a PR blurb.
+
+#### Creating a New Org — Search First
+
+Before asking follow-up questions, search the web for the org. Pre-fill what you can. Then ask briefly about gaps, especially:
+
+1. **Culture** — if you couldn't infer it confidently
+2. **How the user is connected** — which person there do they know?
+
+#### Wiki Links — Bidirectional, Always Maintained
+
+`[[slug]]` links connect people and orgs. Keep them consistent:
+
+- **Person → Org:** `Orgs: [[org-slug]]` in the person file (comma-separate multiple)
+- **Org → Person:** `People: [[person-slug]]` in the org file
+
+When you add or update either side, update the other. If you add Maria to `google.md`'s People list, make sure `maria-garcia.md` has `Orgs: [[google]]`. If you change Maria's org, remove her from the old org file's People list.
+
+When creating an org file prompted by a person, immediately add that person to the People list and set their `Orgs:` field.
+
+#### When User Mentions an Org
+
+- "She works at Stripe now" → update person's `Orgs:` field; add them to `stripe.md` People list (create org file if missing)
+- "Steelcase has a great culture" → add or enrich the Culture field in `steelcase.md`
+- "I'm meeting with someone from Sequoia" → surface any people in peeps who are connected to Sequoia
+
+---
 
 ### Search and Retrieval
 
@@ -190,6 +257,15 @@ grep -iH "keyword\|synonym" peeps/*.md
 
 # Find contacts open to introductions
 grep -rl "Intro willingness.*Open" peeps/
+
+# Find everyone connected to a given org
+grep -l "\[\[google\]\]" peeps/*.md peeps/orgs/*.md
+
+# Find all people at a given org (via Orgs: field)
+grep -rl "Orgs:.*\[\[stripe\]\]" peeps/
+
+# Search org files for culture or industry keywords
+grep -iH "remote\|async\|flat" peeps/orgs/*.md
 ```
 
 **Keyword expansion examples — always broaden like this:**
