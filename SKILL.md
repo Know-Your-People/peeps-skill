@@ -103,8 +103,7 @@ Digs: if installed, when a person has expertise relevant to an open dig, surface
 #### Fields
 
 ```markdown
-# Full Name (nickname or any naming note in brackets)
-
+Name: full name
 Pronouns: guess, if unclear - ask
 Location: from your search, otherwise ask
 LinkedIn: link to LinkedIn search web for it, start with https://
