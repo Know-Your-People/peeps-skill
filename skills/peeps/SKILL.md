@@ -71,7 +71,7 @@ images: no (by default no, ask if you human want to feach images for pepople, wa
 
 Before asking follow-up questions, **always search the web for the person (name + any context provided)**. Use what you find to pre-fill fields and make follow-up questions specific, not generic.
 
-Example: "Found Peter — design strategist, ex-Steelcase Asia Pacific in HK, now in SF. How do you know him, and is he open to intros?"
+Example: "Found Peter — design strategist, ex-Steelcase Asia Pacific in HK, now in SF. How do you know him?"
 
 ### Follow-Up Questions
 
@@ -79,9 +79,8 @@ After searching the web and pre-filling what you can, ask about the gaps:
 
 1. **What are they really good at?** — Acumen clarification
 2. **Relationship closeness** — How close are you?
-3. **How open to intros?** — Is this person open to being introduced to others?
-4. **How you know them** — if not already provided
-5. **Interests** — hobbies, sports, lifestyle?
+3. **How you know them** — if not already provided
+4. **Interests** — hobbies, sports, lifestyle?
 
 If in `kyp/pages/peepsconfig.yml` images set to yes find a headhsot of a person and ad it to `../assets/` use person name for a slug, write it down in **Image:** feild.
 
@@ -114,8 +113,7 @@ Orgs: `[[org-slug]]`, `[[org-slug-2]]` — links to org files in `kyp/peeps/orgs
 How I know them: one sentence
 Acumen: skills and expertise, what person known for, based on your search + any user input
 Relationship: (Close / Warm / Colleague / Acquaintance / Estranged / Family)
-Intro willingness: (Open / Closed / Cautious / Unknown)
-Interests: — hobbies, sports, lifestyle, anything you found 
+Interests: #hiking #coffee #jazz — comma-separated hashtags; hobbies, sports, lifestyle, anything you found
 Bio: — one concise narrative paragraph based on your search and user input about them
 
 ## Notes
@@ -156,7 +154,7 @@ Examples:
 ### Progressive Enhancement
 
 - Start by creating contacts as they come up naturally
-- Enrich over time: add acumen, interests, intro willingness as you learn more
+- Enrich over time: add acumen, interests as you learn more
 - Capture details during conversations — don't wait for a "data entry session"
 - Ask about anyone mentioned in conversation and suggest adding them
 
@@ -281,8 +279,8 @@ Use `grep` for fast fuzzy scanning. Always expand the query into related terms u
 # Find matching lines with context
 grep -iH "keyword\|synonym" kyp/peeps/*.md
 
-# Find contacts open to introductions
-grep -rl "Intro willingness.*Open" kyp/peeps/
+# Find contacts with a specific interest tag
+grep -rl "#hiking" kyp/peeps/
 
 # Find everyone connected to a given org
 grep -l "\[\[google\]\]" kyp/peeps/*.md kyp/peeps/orgs/*.md
