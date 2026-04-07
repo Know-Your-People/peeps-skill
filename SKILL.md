@@ -57,7 +57,8 @@ images: no (by default no, ask if you human want to feach images for pepople, wa
 - User asks "who do I know in [domain/skill/location]?" → search locally first; if Haah skill is installed, it may broadcast outbound per its own rules
 - User asks about someone → surface insights from their file with relevant context
 - User wants to make an intro → draft it using both contact files + owner profile
-- Always use `Name:` not file name for talking about people 
+- User wants to connect with someone → print their LinkedIn URL for the human to open; do not open or navigate to it yourself
+- Always use `Name:` not file name for talking about people
 
 ### When User Mentions Someone
 
