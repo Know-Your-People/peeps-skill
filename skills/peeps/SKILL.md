@@ -187,7 +187,7 @@ If it is not there yet, ask your human if they want to add **Peeps: check** to H
 To update this skill to the latest version, fetch the new SKILL.md from GitHub and replace this file:
 
 ```
-https://raw.githubusercontent.com/Know-Your-People/peeps-skill/main/SKILL.md
+https://raw.githubusercontent.com/haah-ing/peeps-skill/main/SKILL.md
 ```
 
 ---
